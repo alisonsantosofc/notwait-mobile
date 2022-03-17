@@ -4,11 +4,7 @@ import { Text } from 'react-native';
 import { Container } from './styles';
 
 function SignIn() {
-  return (
-    <Container>
-      <Text>SignIn</Text>
-    </Container>
-  );
+  return <Container />;
 }
 
 export default SignIn;
