@@ -17,7 +17,7 @@ export const BrandText = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 14px;
   color: #e9e9e9;
-  margin-left: 70px;
+  margin-left: 100px;
 `;
 
 export const Title = styled.Text`
