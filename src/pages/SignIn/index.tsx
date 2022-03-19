@@ -1,28 +1,55 @@
 import React from 'react';
-import { Image } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
+import { ScrollView } from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import logoImg from '../../assets/img/logo.png';
+import Logo from '../../assets/img/logo.svg';
 
-import { Container, Brand, BrandText, Title } from './styles';
+import {
+  Container,
+  Brand,
+  BrandText,
+  Title,
+  ForgotPassword,
+  ForgotPasswordTitle,
+  CreateAccountButton,
+  CreateAccountButtonTitle,
+} from './styles';
 
 function SignIn() {
   return (
-    <Container>
-      <Brand>
-        <Image source={logoImg} width={500} />
-        <BrandText>Consultas picológicas online</BrandText>
-      </Brand>
+    <>
+      <ScrollView
+        contentContainerStyle={{ flex: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Container>
+          <Brand>
+            <Logo width={300} height={70} />
 
-      <Title>Conecte-se</Title>
+            <BrandText>Consultas picológicas online</BrandText>
+          </Brand>
 
-      <Input name="email" icon="mail" placeholder="Email" />
-      <Input name="password" icon="lock" placeholder="Senha" />
+          <Title>Conecte-se</Title>
 
-      <Button>Entrar</Button>
-    </Container>
+          <Input name="email" icon="mail" placeholder="Email" />
+          <Input name="password" icon="lock" placeholder="Senha" />
+
+          <Button>Entrar</Button>
+
+          <ForgotPassword>
+            <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
+          </ForgotPassword>
+        </Container>
+      </ScrollView>
+
+      <CreateAccountButton>
+        <Icon name="adduser" size={32} color="#ff5733" />
+        <CreateAccountButtonTitle>Criar uma Conta</CreateAccountButtonTitle>
+      </CreateAccountButton>
+    </>
   );
 }
 
