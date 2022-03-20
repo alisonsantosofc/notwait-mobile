@@ -44,7 +44,7 @@ function SignIn() {
 
           <Title>Conecte-se</Title>
 
-          <Form ref={formRef} onSubmit={handleSubmit}>
+          <Form ref={formRef} onSubmit={handleSubmit} style={{ width: '100%' }}>
             <Input name="email" icon="mail" placeholder="Email" />
             <Input name="password" icon="lock" placeholder="Senha" />
 

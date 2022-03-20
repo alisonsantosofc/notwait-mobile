@@ -45,7 +45,7 @@ function SignUp() {
 
           <Title>Cadastre-se</Title>
 
-          <Form ref={formRef} onSubmit={handleSubmit}>
+          <Form ref={formRef} onSubmit={handleSubmit} style={{ width: '100%' }}>
             <Input name="name" icon="user" placeholder="Nome" />
             <Input name="email" icon="mail" placeholder="Email" />
             <Input name="password" icon="lock" placeholder="Senha" />

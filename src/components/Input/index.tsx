@@ -1,53 +1,71 @@
-import React, { useEffect, useRef } from 'react';
-import { TextInputProps } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { TextInput, TextInputProps } from 'react-native';
 import { useField } from '@unform/core';
 
-import { Container, TextInput, Icon } from './styles';
+import { Container, Icon, textInputStyle } from './styles';
 
 interface InputProps extends TextInputProps {
   name: string;
   icon?: string;
 }
 
-interface InputValueReference {
+export interface InputReference extends TextInput {
   value: string;
+  ref: React.RefObject<InputReference> | null;
 }
 
-function Input({ name, icon, placeholder }: InputProps) {
-  const inputElementRef = useRef<any>(null);
+function Input({ name, icon, placeholder, onChangeText, ...rest }: InputProps) {
+  const inputRef = useRef<InputReference>(null);
 
   const { fieldName, defaultValue = '', error, registerField } = useField(name);
 
-  const inputValueRef = useRef({ value: defaultValue });
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.value = defaultValue;
+  }, [defaultValue]);
 
   useEffect(() => {
     registerField<string>({
       name: fieldName,
-      ref: inputValueRef,
-      path: 'value',
-      setValue(ref: any, value) {
-        inputValueRef.current.value = value;
-        inputElementRef.current.setNativeProps({ text: value });
+      ref: inputRef.current,
+      getValue() {
+        if (inputRef.current) return inputRef.current.value;
+
+        return '';
+      },
+      setValue(ref, value) {
+        if (inputRef.current) {
+          inputRef.current.setNativeProps({ text: value });
+          inputRef.current.value = value;
+        }
       },
       clearValue() {
-        inputValueRef.current.value = '';
-        inputElementRef.current.clear();
+        if (inputRef.current) {
+          inputRef.current.setNativeProps({ text: '' });
+          inputRef.current.value = '';
+        }
       },
     });
   }, [fieldName, registerField]);
+
+  const handleChangeText = useCallback(
+    (value: string) => {
+      if (inputRef.current) inputRef.current.value = value;
+      if (onChangeText) onChangeText(value);
+    },
+    [onChangeText],
+  );
 
   return (
     <Container>
       {icon && <Icon name={icon} size={22} color="#4a6a88" />}
 
       <TextInput
-        ref={inputElementRef}
+        ref={inputRef}
+        style={textInputStyle}
         placeholderTextColor="#4a6a88"
         placeholder={placeholder}
         defaultValue={defaultValue}
-        onChangeText={value => {
-          inputValueRef.current.value = value;
-        }}
+        onChangeText={handleChangeText}
       />
     </Container>
   );

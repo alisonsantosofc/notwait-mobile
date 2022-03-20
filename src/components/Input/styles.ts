@@ -12,15 +12,15 @@ export const Container = styled.View`
   background: #1b3750;
 `;
 
-export const TextInput = styled.TextInput`
-  flex: 1;
-  height: 100%;
-  font-family: 'Poppins-Regular';
-  font-size: 16px;
-  color: #e9e9e9;
-`;
-
 export const Icon = styled(FeatherIcon)`
   margin-right: 10px;
   margin-bottom: 4px;
 `;
+
+export const textInputStyle = {
+  flex: 1,
+  height: '100%',
+  fontFamily: 'Poppins-Regular',
+  fontSize: 16,
+  color: '#e9e9e9',
+};
