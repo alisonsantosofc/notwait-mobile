@@ -1,11 +1,9 @@
 import React, { useCallback, useRef } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
-import Icon from 'react-native-vector-icons/Ionicons';
-
-import SignIn from '../SignIn';
+import Icon from 'react-native-vector-icons/Feather';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -17,14 +15,17 @@ import {
   Brand,
   BrandText,
   Title,
-  BackToSignButton,
-  BackToSignButtonTitle,
+  BackToSignLink,
+  BackToSignLinkTitle,
 } from './styles';
 
 function SignUp() {
   const navigation = useNavigation();
 
   const formRef = useRef<FormHandles>(null);
+
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleSubmit = useCallback((data: object) => {
     console.log(data);
@@ -46,9 +47,40 @@ function SignUp() {
           <Title>Cadastre-se</Title>
 
           <Form ref={formRef} onSubmit={handleSubmit} style={{ width: '100%' }}>
-            <Input name="name" icon="user" placeholder="Nome" />
-            <Input name="email" icon="mail" placeholder="Email" />
-            <Input name="password" icon="lock" placeholder="Senha" />
+            <Input
+              name="name"
+              icon="user"
+              placeholder="Nome"
+              autoFocus
+              autoCapitalize="words"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                emailInputRef.current?.focus();
+              }}
+            />
+            <Input
+              ref={emailInputRef}
+              name="email"
+              icon="mail"
+              placeholder="Email"
+              autoCorrect={false}
+              autoCapitalize="none"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                passwordInputRef.current?.focus();
+              }}
+            />
+            <Input
+              ref={passwordInputRef}
+              name="password"
+              icon="lock"
+              placeholder="Senha"
+              secureTextEntry
+              textContentType="newPassword"
+              autoCapitalize="none"
+              returnKeyType="send"
+              onSubmitEditing={() => formRef.current?.submitForm()}
+            />
 
             <Button onPress={() => formRef.current?.submitForm()}>
               Cadastrar
@@ -57,10 +89,10 @@ function SignUp() {
         </Container>
       </ScrollView>
 
-      <BackToSignButton onPress={() => navigation.navigate('SignIn' as never)}>
-        <Icon name="arrow-undo-outline" size={32} color="#ff5733" />
-        <BackToSignButtonTitle>Voltar para conectar-se</BackToSignButtonTitle>
-      </BackToSignButton>
+      <BackToSignLink onPress={() => navigation.navigate('SignIn' as never)}>
+        <Icon name="arrow-left" size={28} color="#ff5733" />
+        <BackToSignLinkTitle>Voltar para conectar-se</BackToSignLinkTitle>
+      </BackToSignLink>
     </>
   );
 }

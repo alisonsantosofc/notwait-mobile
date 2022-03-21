@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
@@ -23,6 +23,8 @@ import {
 
 function SignIn() {
   const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+
   const navigation = useNavigation();
 
   const handleSubmit = useCallback((data: object) => {
@@ -45,8 +47,28 @@ function SignIn() {
           <Title>Conecte-se</Title>
 
           <Form ref={formRef} onSubmit={handleSubmit} style={{ width: '100%' }}>
-            <Input name="email" icon="mail" placeholder="Email" />
-            <Input name="password" icon="lock" placeholder="Senha" />
+            <Input
+              name="email"
+              icon="mail"
+              placeholder="Email"
+              autoCorrect={false}
+              autoCapitalize="none"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                passwordInputRef.current?.focus();
+              }}
+            />
+            <Input
+              ref={passwordInputRef}
+              name="password"
+              icon="lock"
+              placeholder="Senha"
+              secureTextEntry
+              returnKeyType="send"
+              onSubmitEditing={() => {
+                formRef.current?.submitForm();
+              }}
+            />
 
             <Button
               onPress={() => {
@@ -66,7 +88,7 @@ function SignIn() {
       <CreateAccountButton
         onPress={() => navigation.navigate('SignUp' as never)}
       >
-        <Icon name="adduser" size={32} color="#ff5733" />
+        <Icon name="adduser" size={28} color="#ff5733" />
         <CreateAccountButtonTitle>Criar uma Conta</CreateAccountButtonTitle>
       </CreateAccountButton>
     </>

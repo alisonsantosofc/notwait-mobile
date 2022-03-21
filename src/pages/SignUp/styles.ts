@@ -28,17 +28,16 @@ export const Title = styled.Text`
   margin: 64px 0 24px;
 `;
 
-export const BackToSignButton = styled.TouchableOpacity`
+export const BackToSignLink = styled.TouchableOpacity`
   left: 0;
   bottom: 0;
   right: 0;
   padding: 16px 0;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 `;
 
-export const BackToSignButtonTitle = styled.Text`
+export const BackToSignLinkTitle = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 18px;
   margin-left: 6px;

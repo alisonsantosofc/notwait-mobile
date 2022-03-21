@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import { useField } from '@unform/core';
 
@@ -9,15 +16,36 @@ interface InputProps extends TextInputProps {
   icon?: string;
 }
 
-export interface InputReference extends TextInput {
+interface InputReference extends TextInput {
   value: string;
-  ref: React.RefObject<InputReference> | null;
 }
 
-function Input({ name, icon, placeholder, onChangeText, ...rest }: InputProps) {
+function Input(
+  { name, icon, placeholder, onChangeText, ...rest }: InputProps,
+  ref: any,
+) {
   const inputRef = useRef<InputReference>(null);
 
   const { fieldName, defaultValue = '', error, registerField } = useField(name);
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+
+    setIsFilled(!!inputRef.current?.value);
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    focus() {
+      inputRef.current?.focus();
+    },
+  }));
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.value = defaultValue;
@@ -32,7 +60,7 @@ function Input({ name, icon, placeholder, onChangeText, ...rest }: InputProps) {
 
         return '';
       },
-      setValue(ref, value) {
+      setValue(value) {
         if (inputRef.current) {
           inputRef.current.setNativeProps({ text: value });
           inputRef.current.value = value;
@@ -56,8 +84,14 @@ function Input({ name, icon, placeholder, onChangeText, ...rest }: InputProps) {
   );
 
   return (
-    <Container>
-      {icon && <Icon name={icon} size={22} color="#4a6a88" />}
+    <Container isFocused={isFocused}>
+      {icon && (
+        <Icon
+          name={icon}
+          size={22}
+          color={isFocused || isFilled ? '#ff5733' : '#4a6a88'}
+        />
+      )}
 
       <TextInput
         ref={inputRef}
@@ -65,10 +99,13 @@ function Input({ name, icon, placeholder, onChangeText, ...rest }: InputProps) {
         placeholderTextColor="#4a6a88"
         placeholder={placeholder}
         defaultValue={defaultValue}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
         onChangeText={handleChangeText}
+        {...rest}
       />
     </Container>
   );
 }
 
-export default Input;
+export default forwardRef(Input);

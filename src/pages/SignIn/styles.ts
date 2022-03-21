@@ -45,7 +45,6 @@ export const CreateAccountButton = styled.TouchableOpacity`
   padding: 16px 0;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 `;
 
 export const CreateAccountButtonTitle = styled.Text`
