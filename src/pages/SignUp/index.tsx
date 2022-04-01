@@ -11,6 +11,7 @@ import Button from '../../components/Button';
 
 import Logo from '../../assets/img/logo.svg';
 
+import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import {
@@ -52,14 +53,14 @@ function SignUp() {
         abortEarly: false,
       });
 
-      // await api.post('/users', data);
-
-      // navigate('/');
+      await api.post('/users', data);
 
       Alert.alert(
-        'Cadastro realizado',
-        'Agora você já pode se conectar ao Goomind',
+        'Cadastro realizado com sucesso!',
+        'Agora você já pode se conectar',
       );
+
+      navigation.goBack();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err as Yup.ValidationError);
