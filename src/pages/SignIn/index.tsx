@@ -11,6 +11,7 @@ import Button from '../../components/Button';
 
 import Logo from '../../assets/img/logo.svg';
 
+import { useAuth } from '../../hooks/auth';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import {
@@ -35,42 +36,45 @@ function SignIn() {
 
   const navigation = useNavigation();
 
-  const handleSubmit = useCallback(async (data: SignInFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const { signIn } = useAuth();
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('O e-mail é obrigatório')
-          .email('O e-mail digitado está inválido'),
-        password: Yup.string().required('A senha é obrigatória'),
-      });
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('O e-mail é obrigatório')
+            .email('O e-mail digitado está inválido'),
+          password: Yup.string().required('A senha é obrigatória'),
+        });
 
-      // await signIn({
-      //   email: data.email,
-      //   password: data.password,
-      // });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      // navigate(from, { replace: true });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err as Yup.ValidationError);
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err as Yup.ValidationError);
 
-        formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors);
 
-        return;
+          return;
+        }
+
+        Alert.alert(
+          'Erro na autenticação',
+          'Ocorreu um erro com a sua conexão, verifique as suas informações',
+        );
       }
-
-      Alert.alert(
-        'Erro na autenticação',
-        'Ocorreu um erro com a sua conexão, verifique as suas informações',
-      );
-    }
-  }, []);
+    },
+    [signIn],
+  );
 
   return (
     <>
