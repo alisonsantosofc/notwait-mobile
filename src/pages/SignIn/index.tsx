@@ -62,6 +62,7 @@ function SignIn() {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err as Yup.ValidationError);
 
+          console.log(errors);
           formRef.current?.setErrors(errors);
 
           return;
