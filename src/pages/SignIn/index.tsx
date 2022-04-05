@@ -62,15 +62,19 @@ function SignIn() {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err as Yup.ValidationError);
 
-          console.log(errors);
           formRef.current?.setErrors(errors);
+
+          Alert.alert(
+            'Erro de validação',
+            'Verifique as suas informações e se os campos estão preenchidos corretamente.',
+          );
 
           return;
         }
 
         Alert.alert(
           'Erro na autenticação',
-          'Ocorreu um erro com a sua conexão, verifique as suas informações',
+          'Ocorreu um erro com a sua conexão, verifique as suas informações ou tente novamente mais tarde.',
         );
       }
     },
